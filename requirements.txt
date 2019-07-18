@@ -1,0 +1,4 @@
+pyelftools==0.25
+cxxfilt==0.2.0
+sty==1.0.0b11
+lark-parser==0.7.1

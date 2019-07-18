@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+#
+# Copyright © 2019 Paweł Dziepak
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+import argparse
+import gpu_uarch.theme
+import gpu_uarch.nv.cubin
+
+parser = argparse.ArgumentParser()
+parser.add_argument('cubin')
+parser.add_argument('--no-colors', action='store_true')
+
+args = parser.parse_args()
+
+if not args.no_colors:
+    gpu_uarch.theme.set_theme(gpu_uarch.theme.SolarizedTheme())
+
+cubin = gpu_uarch.nv.cubin.CuBin(args.cubin)
+for func in cubin.functions:
+    print('{theme.function}{}{theme.rs}{theme.symbol}:'.format(
+        func.name, theme=gpu_uarch.theme.get_theme()))
+    for inst in func.disasm():
+        print(inst)
